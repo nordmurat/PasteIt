@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PasteIt</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PasteIt.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Paste It</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item">
+                            <a class="btn btn-success navbar-btn" asp-controller="Paste" asp-action="Create">New Paste</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Trending</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">API</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Tools</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">FAQ</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex flex-grow-1">
+                        <input class="form-control me-2" type="search" id="searchBar" placeholder="Search" aria-label="Search">
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (!SignInManager.IsSignedIn(User))
+                        {
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="SignIn"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login"><i class="bi bi-person-fill"></i> Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@UserManager.GetUserName(User)</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" type="button" asp-controller="Profile" asp-action="Index">Profile</a></li>
+                                    <li><a class="dropdown-item" type="button" asp-controller="Profile" asp-action="Folders">My Folders</a></li>
+                                    <li><a class="dropdown-item" type="button" asp-controller="Profile" asp-action="Pastes">My Pastes</a></li>
+                                    <li></li>
+                                    <li><a class="dropdown-item" type="button" asp-controller="Auth" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            <span>&copy; @DateTime.Now.Year PasteIt</span>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
