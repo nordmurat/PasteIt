@@ -1,0 +1,81 @@
+﻿@model PasteIt.Models.ViewModels.PasteReadViewModel
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <label class="font-weight-bold d-flex justify-content-between">
+                    <span>New Paste</span>
+                </label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-1 d-flex aligns-items-center">
+                        <img class="mr-3 rounded-circle img-fluid" src="https://paste.tc/img/default-avatar.png" alt="avatar" style="height: 60px">
+                    </div>
+                    <div class="col-md-11">
+                        <h5 class="mt-0 text-left"><i class="bi bi-file-text"></i> @Model.Paste.Title</h5>
+                        <p class="text-muted small text-left align-middle">
+                            <i class="bi bi-person"></i>   @(Model.Paste.Author == null ? "Anon" : Model.Paste.Author) |
+                            <i class="bi bi-eye"></i>   @Model.Paste.ViewCount |
+                            <i class="bi bi-calendar4-week"></i>   @Model.Paste.CreatedTime.ToShortDateString() |
+                            <i class="bi bi-file-code"></i>   @Model.Paste.Syntax
+                        </p> 
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" id="editorSyntax" value="@Model.Paste.Syntax" />
+                    <input type="hidden" id="editorContent" value="@Model.Paste.Content" />
+                    <div style="height:400px" id="editor"></div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+       <div class="card">
+            <div class="card-header">
+                <label class="font-weight-bold d-flex justify-content-between">
+                    <span>Recent Pastes</span>
+                </label>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach(var paste in @Model.RecentPastes)
+                    {
+                        <li class="list-group-item">
+                            <i class="bi bi-file-text"></i>
+                            <a href="~/@paste.Id">@paste.Title</a>
+                            <p>
+                                <small class="text-mutted">
+                                    <small>@paste.Syntax   |   <i class="bi bi-eye-fill"></i> @paste.ViewCount   |   @paste.Notes</small>
+                                </small>
+                            </p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.19.0/src-min-noconflict/ace.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var syntax = $('#editorSyntax').val();
+            var content = $('#editorContent').val();
+            var editor = ace.edit("editor");
+
+            editor.setValue(content);
+            editor.setTheme("ace/theme/"+"xcode");
+            editor.session.setMode("ace/mode/"+syntax);
+        });
+    </script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ace-builds@1.19.0/css/ace.min.css">
+}

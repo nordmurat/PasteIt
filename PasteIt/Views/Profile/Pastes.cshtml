@@ -1,0 +1,55 @@
+﻿@model PasteIt.Models.ViewModels.ProfilePastesViewModel
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <label class="font-weight-bold d-flex justify-content-between">
+                    <span>My Pastes</span>
+                </label>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach (var paste in @Model.Pastes)
+                    {
+                        <li class="list-group-item">
+                            <i class="bi bi-file-text"></i>
+                            <a href="~/@paste.Id">@paste.Title</a>
+                            <p>
+                                <small class="text-mutted">
+                                    <small>@paste.Syntax   |   <i class="bi bi-eye-fill"></i> @paste.ViewCount   |   @paste.Notes</small>
+                                </small>
+                            </p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <label class="font-weight-bold d-flex justify-content-between">
+                    <span>Recent Pastes</span>
+                </label>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach (var paste in @Model.RecentPastes)
+                    {
+                        <li class="list-group-item">
+                            <i class="bi bi-file-text"></i>
+                            <a href="~/@paste.Id">@paste.Title</a>
+                            <p>
+                                <small class="text-mutted">
+                                    <small>@paste.Syntax   |   <i class="bi bi-eye-fill"></i> @paste.ViewCount   |   @paste.Notes</small>
+                                </small>
+                            </p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
