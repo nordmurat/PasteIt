@@ -49,12 +49,6 @@ namespace PasteIt.Data
         {
             var paste = _context.Pastes.FirstOrDefault(c => c.Id == Id);
 
-            if (paste != null)
-            {
-                paste.ViewCount++;
-                _context.SaveChanges();
-            }
-
             return paste;
         }
 
@@ -110,6 +104,16 @@ namespace PasteIt.Data
                 return user;
             }
             return null;
+        }
+
+        public void increaseViewCount(string Id)
+        {
+            Paste paste = _context.Pastes.FirstOrDefault(x => x.Id == Id);
+            if (paste != null)
+            {
+                paste.ViewCount++;
+                _context.SaveChanges();
+            }
         }
     }
 }

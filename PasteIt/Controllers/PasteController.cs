@@ -34,12 +34,21 @@ namespace PasteIt.Controllers
                 Paste = _repository.ReadPaste(id)
             };
 
+            if(model.Paste == null || model.RecentPastes == null)
+            {
+                if (model.Paste == null) return StatusCode(403);
+            }
+
             if (model.Paste.Password != null)
             {
                 if (model.Paste.Password != password)
                 {
                     ViewData["password"] = password;
                     return View("ReadRequiredPassword", model);
+                }
+                else
+                {
+                    _repository.increaseViewCount(model.Paste.Id);
                 }
             }
 
