@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using PasteIt.Entities;
+using System.Text.RegularExpressions;
 
 namespace PasteIt.Data
 {
@@ -12,6 +13,8 @@ namespace PasteIt.Data
 		private readonly AppDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        private readonly string idRegex = @"[^a-z0-9]";
 
         public PasteRepository(AppDbContext context, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
 		{
@@ -22,8 +25,8 @@ namespace PasteIt.Data
 
 		public string CreatePaste(Paste data)
 		{
-			data.Id = data.Title;
-			data.CreatedTime = DateTime.UtcNow;
+            data.Id = Regex.Replace(data.Title.ToLower(), idRegex, string.Empty);
+            data.CreatedTime = DateTime.UtcNow;
             data.Notes = "";
 			_context.Pastes.Add(data);
 			_context.SaveChanges();
