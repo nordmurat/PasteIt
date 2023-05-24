@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using PasteIt.Entities;
+using System.Text.RegularExpressions;
 
 namespace PasteIt.Data
 {
@@ -12,6 +13,8 @@ namespace PasteIt.Data
 		private readonly AppDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        private readonly string idRegex = @"[^a-z0-9]";
 
         public PasteRepository(AppDbContext context, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
 		{
@@ -22,8 +25,8 @@ namespace PasteIt.Data
 
 		public string CreatePaste(Paste data)
 		{
-			data.Id = data.Title;
-			data.CreatedTime = DateTime.UtcNow;
+            data.Id = Regex.Replace(data.Title.ToLower(), idRegex, string.Empty);
+            data.CreatedTime = DateTime.UtcNow;
             data.Notes = "";
 			_context.Pastes.Add(data);
 			_context.SaveChanges();
@@ -50,6 +53,11 @@ namespace PasteIt.Data
             var paste = _context.Pastes.FirstOrDefault(c => c.Id == Id);
 
             return paste;
+        }
+
+        public Folder ReadFolderPastes (string Id)
+        {
+            return _context.Folders.Find(Id);
         }
 
         public static string TimeAgo(DateTime dt)
@@ -114,6 +122,17 @@ namespace PasteIt.Data
                 paste.ViewCount++;
                 _context.SaveChanges();
             }
+        }
+
+        public void CreateFolder(Folder data)
+        {
+            _context.Folders.Add(data);
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<Folder> ReadFolder(string owner)
+        {
+            return _context.Folders.Where(f => f.Owner.Equals(owner));
         }
     }
 }

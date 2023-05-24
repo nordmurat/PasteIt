@@ -10,7 +10,7 @@
             <div class="card-header">
                 <label class="font-weight-bold d-flex justify-content-between">
                     <span>New Paste</span>
-                    <input type="file" style="display:none;" id="fileInput"/>
+                    <input type="file" style="display:none;" id="fileInput" />
                     <button type="button" class="btn btn-sm btn-success" id="fileInputBtn" onclick="document.getElementById('fileInput').click()">Open File</button>
                 </label>
             </div>
@@ -29,9 +29,11 @@
                         <div class="form-group col-md-6">
                             <label class="active">
                                 Paste Folder:
-                                <small class="text-muted"> [Optional] <a class="" href="#"><i class="bi bi-folder-plus"></i> Create Folder</a></small>
+                                <button type="button" class="btn btn-primary-outline" data-bs-toggle="modal" data-bs-target="#createFolderModal">
+                                    <i class="bi bi-folder-plus"></i> Create Folder
+                                </button>
                             </label>
-                            <select class="form-select" name="Folder" aria-label="Select Folder">
+                            <select class="form-select" name="Folder" aria-label="Select Folder" id="folderSelect">
                                 <option selected>Select</option>
                             </select>
                         </div>
@@ -202,16 +204,16 @@
                                 <small class="text-muted"> [Optional] </small>
                             </label>
                             <select class="form-control" name="expire">
-	                            <option value="N" selected>Never</option>
-	                            <option value="SD">Self Destroy</option>
-	                            <option value="10M">10 Minutes</option>
-	                            <option value="1H">1 Hour</option>
-	                            <option value="1D">1 Day</option>
-	                            <option value="1W">1 Week</option>
-	                            <option value="2W">2 Weeks</option>
-	                            <option value="1M">1 Month</option>
-	                            <option value="6M">6 Months</option>
-	                            <option value="1Y">1 Year</option>
+                                <option value="N" selected>Never</option>
+                                <option value="SD">Self Destroy</option>
+                                <option value="10M">10 Minutes</option>
+                                <option value="1H">1 Hour</option>
+                                <option value="1D">1 Day</option>
+                                <option value="1W">1 Week</option>
+                                <option value="2W">2 Weeks</option>
+                                <option value="1M">1 Month</option>
+                                <option value="6M">6 Months</option>
+                                <option value="1Y">1 Year</option>
                             </select>
                         </div>
                     </div>
@@ -219,9 +221,9 @@
                         <div class="form-group col-md-6">
                             <label class="active">Paste Status:</label>
                             <select class="form-control" name="Status">
-	                            <option value="1">Public</option>
-	                            <option value="2">Unlisted</option>
-	                            <option value="3">Private (members only)</option>
+                                <option value="1">Public</option>
+                                <option value="2">Unlisted</option>
+                                <option value="3">Private (members only)</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -259,7 +261,7 @@
     </div>
 
     <div class="col-md-3">
-       <div class="card">
+        <div class="card">
             <div class="card-header">
                 <label class="font-weight-bold d-flex justify-content-between">
                     <span>Recent Pastes</span>
@@ -267,7 +269,7 @@
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    @foreach(var paste in Model)
+                    @foreach (var paste in Model)
                     {
                         <li class="list-group-item">
                             <i class="bi bi-file-text"></i>
@@ -285,9 +287,45 @@
     </div>
 </div>
 
+<!-- Create Folder Modal -->
+<div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="createFolderForm">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="Name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="Name" name="Name">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="Password" class="form-label">Password <small>[Optional]</small></label>
+                            <input type="password" class="form-control" id="Password" name="Password">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="Description" class="form-label">Description <small>[Optional]</small></label>
+                            <input type="text" class="form-control" id="Description" name="Description">
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="createFolderFormSubmit" onclick="createFolder();">Create</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.19.0/src-min-noconflict/ace.min.js"></script>
     <script src="~/js/editor.js"></script>
+    <script src="~/js/site.js"></script>
 }
 
 @section styles {

@@ -82,6 +82,11 @@ app.UseEndpoints(endpoints =>
         name: "readPaste",
         pattern: "/{id}",
         defaults: new { controller = "Paste", action = "Read" });
+
+    endpoints.MapControllerRoute(
+        name: "readFolderPastes",
+        pattern: "/{id}",
+        defaults: new { controller = "Folder", action = "BrowseFolder" });
 });
 
 app.Run();

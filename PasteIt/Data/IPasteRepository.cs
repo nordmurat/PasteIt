@@ -12,6 +12,10 @@ namespace PasteIt.Data
         public IEnumerable<Paste> GetPastesByAuthor(string author, int pages);
         public Paste ReadPaste(string Id);
 
+        public Folder ReadFolderPastes(string Id);
+        public void CreateFolder(Folder data);
+        public IEnumerable<Folder> ReadFolder(string owner);
+
         public Task<IdentityUser> GetLoggedInUser();
     }
 }

@@ -211,9 +211,8 @@ namespace PasteIt.Entities
 
             modelBuilder.Entity("PasteIt.Entities.Folder", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -258,8 +257,8 @@ namespace PasteIt.Entities
                     b.Property<string>("Expire")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("FolderId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("FolderId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
                         .IsRequired()
